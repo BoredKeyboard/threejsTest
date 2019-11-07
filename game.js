@@ -1,11 +1,14 @@
 var scene = new THREE.Scene();
     
 var camera = new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,1000)
-camera.position.set(0,1,4);  
+camera.position.set(3,1,0);
+camera.rotation.set(0,-67.5,0);
 
 var renderer = new THREE.WebGLRenderer({antialias: true});
-renderer.setClearColor("#e5e5e5");
+renderer.setClearColor("#000000");
 renderer.setSize(window.innerWidth,window.innerHeight);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.BasicShadowMap;
 
 document.body.appendChild(renderer.domElement);
 
@@ -18,21 +21,33 @@ window.addEventListener('resize', () => {
 
 
 var geometry = new THREE.BoxGeometry(1, 1, 1);
-var material = new THREE.MeshLambertMaterial({color: 0xFFCC00});
+var material = new THREE.MeshPhongMaterial({color: 0xFF4444});
 var mesh = new THREE.Mesh(geometry, material);
 
-mesh.position.set(0,0,0);
-mesh.rotation.set(45,45,0);
+mesh.position.set(0,0.5,0);
+mesh.rotation.set(0,45,0);
 mesh.scale.set(1,1,1);
-
+mesh.receiveShadow = true;
+mesh.castShadow = true;
 scene.add(mesh);
 
-var ambLight = new THREE.AmbientLight(0x404040);
+var ambLight = new THREE.AmbientLight(0x404040, 0.5);
 scene.add(ambLight);
 
 var light = new THREE.PointLight(0xFFFFFF, 1, 500)
-light.position.set(10,0,25);
+light.position.set(3,6,-3);
+light.castShadow = true;
+light.shadow.camera.near = 0.1;
+light.shadow.camera.far = 25;
 scene.add(light);
+
+var floor = new THREE.Mesh(
+    new THREE.PlaneGeometry(10,10,10,10),
+    new THREE.MeshPhongMaterial({color:0xFFFFFF, wireframe:false})
+);
+floor.rotation.x -= Math.PI / 2;
+floor.receiveShadow = true;
+scene.add(floor);
 
 var xSpeed = 0.1;
 var ySpeed = 0.1;
@@ -40,7 +55,7 @@ var zSpeed = 0.1;
 var scale = 1;
 var mouseX = 0;
 var mouseY = 0;
-
+var player = {speed:0.075};
 
 document.addEventListener("keydown", onDocumentKeyDown, false);
 document.addEventListener("keyup", onDocumentKeyUp, false);
@@ -88,38 +103,40 @@ function mouseMove(event) {
 
 var render = function() {
     requestAnimationFrame(render);
-    mesh.rotation.set(0,0,0);
     renderer.render(scene, camera);
 
     //up, SPACE
     if (keyIsDown(32)) {
-        mesh.position.y -= ySpeed;
+        camera.position.y += player.speed;
     }
-    //down, CTRL
-    else if (keyIsDown(17)) {
-        mesh.position.y += ySpeed;
+    //down, SHIFT
+    if (keyIsDown(16)) {
+        camera.position.y -= player.speed;
     }
     //left, A
-    else if (keyIsDown(65)) {
-        mesh.position.x += xSpeed;
+    if (keyIsDown(65)) {
+        camera.position.x += -Math.cos(camera.rotation.y) * player.speed;
+        camera.position.z += Math.sin(camera.rotation.y) * player.speed;
     }
     //right, D
-    else if (keyIsDown(68)) {
-        mesh.position.x -= xSpeed;
+    if (keyIsDown(68)) {
+        camera.position.x += Math.cos(camera.rotation.y) * player.speed;
+        camera.position.z += -Math.sin(camera.rotation.y) * player.speed;
     }
     //forward, W
-     else if (keyIsDown(87)) {
-        mesh.position.z += zSpeed;
+    if (keyIsDown(87)) {
+        camera.position.x += -Math.sin(camera.rotation.y) * player.speed;
+        camera.position.z += -Math.cos(camera.rotation.y) * player.speed;
     }
     //backward, S
-    else if (keyIsDown(83)) {
-        mesh.position.z -= zSpeed;
+    if (keyIsDown(83)) {
+        camera.position.x += Math.sin(camera.rotation.y) * player.speed;
+        camera.position.z += Math.cos(camera.rotation.y) * player.speed;
     }
     //enter, reset position
-    else if (keyIsDown(13)) {
-        mesh.position.x = 0.0;
-        mesh.position.y = 0.0;
-        mesh.position.z = 0.0;
+    if (keyIsDown(13)) {
+        camera.position.set(3,1,0);
+        camera.rotation.set(0,-67.5,0);
     }
 
 }
