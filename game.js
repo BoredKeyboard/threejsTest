@@ -28,18 +28,20 @@ window.addEventListener('resize', () => {
   camera.updateProjectionMatrix();
 })
 
-var textureLoader = new THREE.TextureLoader();
+const mtlLoader = new THREE.MTLLoader();
+const objLoader = new THREE.OBJLoader();
+const textureLoader = new THREE.TextureLoader();
 crateTexture = new textureLoader.load("assets/crate0/crate0_diffuse.png");
 crateBumpMap = new textureLoader.load("assets/crate0/crate0_bump.png");
 crateNormalMap = new textureLoader.load("assets/crate0/crate0_normal.png");
 
-var mtlLoader = new THREE.MTLLoader();
+
 
 mtlLoader.setPath('assets/fantasy/Models/OBJ/');
 mtlLoader.load('tree.mtl', function(materials){
     materials.preload();
 
-    var objLoader = new THREE.OBJLoader();
+    
     objLoader.setMaterials(materials);
     objLoader.setPath('assets/fantasy/Models/OBJ/');
     objLoader.load('tree.obj', function(object) {
