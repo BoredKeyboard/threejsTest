@@ -1,5 +1,14 @@
 var scene = new THREE.Scene();
-    
+
+var xSpeed = 0.1;
+var ySpeed = 0.1;
+var zSpeed = 0.1;
+var scale = 1;
+var mouseX = 0;
+var mouseY = 0;
+var player = {speed:0.075};
+var shadowRes = 2048; //512 is default, recommended: 1024, 1536, 2048, 3072, 4096
+
 var camera = new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,1000)
 camera.position.set(3,1,0);
 camera.rotation.set(0,-67.5,0);
@@ -8,7 +17,7 @@ var renderer = new THREE.WebGLRenderer({antialias: true});
 renderer.setClearColor("#000000");
 renderer.setSize(window.innerWidth,window.innerHeight);
 renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.BasicShadowMap;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
 document.body.appendChild(renderer.domElement);
 
@@ -19,19 +28,57 @@ window.addEventListener('resize', () => {
   camera.updateProjectionMatrix();
 })
 
+var textureLoader = new THREE.TextureLoader();
+crateTexture = new textureLoader.load("assets/crate0/crate0_diffuse.png");
+crateBumpMap = new textureLoader.load("assets/crate0/crate0_bump.png");
+crateNormalMap = new textureLoader.load("assets/crate0/crate0_normal.png");
 
-var geometry = new THREE.BoxGeometry(1, 1, 1);
-var material = new THREE.MeshPhongMaterial({color: 0xFF4444});
-var mesh = new THREE.Mesh(geometry, material);
+var mtlLoader = new THREE.MTLLoader();
 
-mesh.position.set(0,0.5,0);
-mesh.rotation.set(0,45,0);
-mesh.scale.set(1,1,1);
-mesh.receiveShadow = true;
-mesh.castShadow = true;
-scene.add(mesh);
+mtlLoader.setPath('assets/fantasy/Models/OBJ/');
+mtlLoader.load('tree.mtl', function(materials){
+    materials.preload();
+
+    var objLoader = new THREE.OBJLoader();
+    objLoader.setMaterials(materials);
+    objLoader.setPath('assets/fantasy/Models/OBJ/');
+    objLoader.load('tree.obj', function(object) {
+        object.position.set(-3,0,-2);
+        scene.add(object);
+    });
+})
+
+
+
+var cube = new THREE.Mesh(
+    new THREE.BoxGeometry(1, 1, 1),
+    new THREE.MeshPhongMaterial({color: 0xFF4444})
+);
+
+cube.position.set(0,0.5,0);
+cube.rotation.set(0,45,0);
+cube.scale.set(1,1,1);
+cube.receiveShadow = true;
+cube.castShadow = true;
+scene.add(cube);
+
+var crate = new THREE.Mesh(
+    new THREE.BoxGeometry(2,2,2),
+    new THREE.MeshPhongMaterial({
+        color: 0xFFFFFF,
+        map: crateTexture,
+        bumpMap: crateBumpMap,
+        normalMap: crateNormalMap
+    })
+);
+
+crate.position.set(0,1,2.25);
+crate.receiveShadow = true;
+crate.castShadow = true;
+scene.add(crate);
 
 var ambLight = new THREE.AmbientLight(0x404040, 0.5);
+//ambLight.castShadow = true;
 scene.add(ambLight);
 
 var light = new THREE.PointLight(0xFFFFFF, 1, 500)
@@ -39,6 +86,8 @@ light.position.set(3,6,-3);
 light.castShadow = true;
 light.shadow.camera.near = 0.1;
 light.shadow.camera.far = 25;
+light.shadowMapWidth = shadowRes;
+light.shadowMapHeight = shadowRes;
 scene.add(light);
 
 var floor = new THREE.Mesh(
@@ -49,13 +98,7 @@ floor.rotation.x -= Math.PI / 2;
 floor.receiveShadow = true;
 scene.add(floor);
 
-var xSpeed = 0.1;
-var ySpeed = 0.1;
-var zSpeed = 0.1;
-var scale = 1;
-var mouseX = 0;
-var mouseY = 0;
-var player = {speed:0.075};
+
 
 document.addEventListener("keydown", onDocumentKeyDown, false);
 document.addEventListener("keyup", onDocumentKeyUp, false);
@@ -104,6 +147,8 @@ function mouseMove(event) {
 var render = function() {
     requestAnimationFrame(render);
     renderer.render(scene, camera);
+
+    crate.rotation.y += 0.025;
 
     //up, SPACE
     if (keyIsDown(32)) {
