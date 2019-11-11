@@ -1,7 +1,5 @@
 var scene = new THREE.Scene();
 
-//test
-
 var xSpeed = 0.1;
 var ySpeed = 0.1;
 var zSpeed = 0.1;
