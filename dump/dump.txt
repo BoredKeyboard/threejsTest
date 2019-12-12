@@ -1,0 +1,47 @@
+    /*
+    var mtlLoader = new THREE.MTLLoader(loadingManager);
+    var objLoader = new THREE.OBJLoader(loadingManager);
+    
+    function obj(object) {
+        object.position.set(-2,1,-2);
+        object.scale.set(10,10,10);
+        scene.add(object);
+    }
+
+    function mtl(materials) {
+        materials.preload();
+    
+        objLoader.setMaterials(materials);
+        objLoader.setPath('assets/weaponPack/Models/');
+        objLoader.load('machinegun.obj', obj);
+    };
+
+    mtlLoader.setPath('assets/weaponPack/Models/');
+
+    mtlLoader.load('machinegun.mtl', mtl);
+
+    mtlLoader.setPath('assets/weaponPack/Models/');
+    mtlLoader.load('flamethrower.mtl', function(materials){
+        materials.preload();
+
+        
+        objLoader.setMaterials(materials);
+        objLoader.setPath('assets/weaponPack/Models/');
+        objLoader.load('flamethrower.obj', function(gun) {
+            
+            gun.position.set(
+                camera.position.x - Math.sin(camera.rotation.y),
+                camera.position.y,
+                camera.position.z + Math.cos(camera.rotation.y)
+            );
+            
+            gun.scale.set(10,10,10);
+            scene.add(gun);        
+        });
+    })
+    */
+
+
+
+
+
