@@ -6,8 +6,8 @@ var zSpeed = 0.1;
 var scale = 2.2;
 var mouseX = 0;
 var mouseY = 0;
-var player = {speed:0.075};
-var shadowRes = 512; //512 is default, recommended: 1024, 1536, 2048, 3072, 4096
+var player = {speed:0.05};
+var shadowRes = 2048; //512 is default, recommended: 1024, 1536, 2048, 3072, 4096
 var renderer = new THREE.WebGLRenderer({antialias: true});
 var loadingScreen = {
     scene: new THREE.Scene(),
@@ -18,16 +18,17 @@ var loadingScreen = {
     )
 };
 
+var playerWeapon = "pistol";
+
 var LOADING_MANAGER = null;
 var RESOURCES_LOADED = false; 
 
 var camera = new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,1000)
 
 function init(){
-     
+    
     var time = Date.now() * 0.0005;
 	var delta = clock.getDelta();
-
     
     camera.position.set(6,1,0);
     camera.rotation.set(0,-67.5,0);
@@ -145,7 +146,7 @@ function init(){
     */
 
     var floor = new THREE.Mesh(
-        new THREE.PlaneGeometry(20,20,20,20),
+        new THREE.PlaneGeometry(40,40,40,40),
         new THREE.MeshPhongMaterial({color:0x5f5f5f, wireframe:false})
     );
     floor.rotation.x -= Math.PI / 2;
@@ -200,7 +201,7 @@ function init(){
         requestAnimationFrame(render);
         renderer.render(scene, camera);
         //pyramid.rotation.y += 0.025;
-        crate.rotation.y += 0.025;
+        crate.rotation.y += 0.005;
 
         //up, SPACE
         if (keyIsDown(32)) {
@@ -236,12 +237,44 @@ function init(){
             //camera.rotation.set(0,-67.5,0);
         }
 
+
+        //Weapon switch
+
+        //1
+        if (keyIsDown(49)) {
+            meshes[playerWeapon].visible = false;
+            playerWeapon = "pistol";
+        }
         
+        //2
+        if (keyIsDown(50)) {
+            meshes[playerWeapon].visible = false;
+            playerWeapon = "machinegun";
+        }
+
+        //3
+        if (keyIsDown(51)) {
+            meshes[playerWeapon].visible = false;
+            playerWeapon = "flamethrower";
+        }
+
+        //4
+        if (keyIsDown(52)) {
+            meshes[playerWeapon].visible = false;
+            playerWeapon = "sniper";
+        }
+
+        //5
+        if (keyIsDown(53)) {
+            meshes[playerWeapon].visible = false;
+            playerWeapon = "shotgun";
+        }
 
     }
 
     render();
     animate();
+
 }
 
 function animate(){
@@ -251,19 +284,20 @@ function animate(){
         renderer.render(loadingScreen.scene, loadingScreen.camera);
         return;
     }
-
-    meshes["sniper"].position.set(
+    meshes[playerWeapon].visible = true;
+    meshes[playerWeapon].position.set(
         camera.position.x - Math.sin(camera.rotation.y - Math.PI/6) * 0.65,
         camera.position.y - 0.35,
         camera.position.z - Math.cos(camera.rotation.y - Math.PI/6) * 0.65
     );
-    meshes["sniper"].rotation.set(
+    meshes[playerWeapon].rotation.set(
         camera.rotation.x,
         camera.rotation.y - Math.PI,
         camera.rotation.z
     );
 
     requestAnimationFrame(animate);
+
 }
 
 window.onload = init;

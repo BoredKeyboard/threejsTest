@@ -28,12 +28,24 @@ var models = {
         mtl: "assets/weaponPack/Models/sniper.mtl",
         mesh: null,
         castShadow: false
+    },
+    pistol: {
+        obj: "assets/weaponPack/Models/pistol.obj",
+        mtl: "assets/weaponPack/Models/pistol.mtl",
+        mesh: null,
+        castShadow: false
+    },
+    shotgun: {
+        obj: "assets/weaponPack/Models/shotgun.obj",
+        mtl: "assets/weaponPack/Models/shotgun.mtl",
+        mesh: null,
+        castShadow: false
     }
 };
 
-
 var meshes = {};
 
+var visibility = false;
 
 function onResourcesLoaded() {
 
@@ -44,8 +56,9 @@ function onResourcesLoaded() {
     scene.add(meshes["windmill"]);
 
     meshes["tower"] = models.tower.mesh.clone();
-    meshes["tower"].position.set(-3,0,2);
-    meshes["tower"].scale.set(0.08,0.08,0.08);
+    meshes["tower"].position.set(-4,0,8);
+    meshes["tower"].scale.set(0.16,0.13,0.16);
+    //meshes["tower"].visible = false;
     scene.add(meshes["tower"]);
     
 
@@ -53,16 +66,31 @@ function onResourcesLoaded() {
     meshes["machinegun"] = models.machinegun.mesh.clone();
     meshes["machinegun"].position.set(2,1,2);
     meshes["machinegun"].scale.set(10,10,10);
+    meshes["machinegun"].visible = visibility;
     scene.add(meshes["machinegun"]);
 
     meshes["flamethrower"] = models.flamethrower.mesh.clone();
     meshes["flamethrower"].position.set(2,1,0);
     meshes["flamethrower"].scale.set(10,10,10);
+    meshes["flamethrower"].visible = visibility;
     scene.add(meshes["flamethrower"]);
 
     meshes["sniper"] = models.sniper.mesh.clone()
     meshes["sniper"].position.set(3,1,-2);
     meshes["sniper"].scale.set(10,10,10);
+    meshes["sniper"].visible = visibility;
     scene.add(meshes["sniper"]);
+
+    meshes["pistol"] = models.pistol.mesh.clone()
+    meshes["pistol"].position.set(3,1,-4);
+    meshes["pistol"].scale.set(7,7,7);
+    meshes["pistol"].visible = visibility;
+    scene.add(meshes["pistol"]);
+
+    meshes["shotgun"] = models.shotgun.mesh.clone()
+    meshes["shotgun"].position.set(3,1,-2);
+    meshes["shotgun"].scale.set(10,10,10);
+    meshes["shotgun"].visible = visibility;
+    scene.add(meshes["shotgun"]);
 
 }
