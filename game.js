@@ -6,8 +6,9 @@ var zSpeed = 0.1;
 var scale = 2.2;
 var mouseX = 0;
 var mouseY = 0;
-var player = {speed:0.05};
-var shadowRes = 2048; //512 is default, recommended: 1024, 1536, 2048, 3072, 4096
+var shootSpeed = 20;
+var player = {speed:0.05, canShoot:shootSpeed };
+var shadowRes = 512; //512 is default, recommended: 1024, 1536, 2048, 3072, 4096
 var renderer = new THREE.WebGLRenderer({antialias: true});
 var loadingScreen = {
     scene: new THREE.Scene(),
@@ -17,6 +18,15 @@ var loadingScreen = {
         new THREE.MeshBasicMaterial({ color:0xac0000 })
     )
 };
+
+var mouseDown = false;
+window.addEventListener("mousedown", function(){
+    mouseDown = true;
+});
+window.addEventListener("mouseup", function(){
+    mouseDown = false;
+});
+
 
 var playerWeapon = "pistol";
 
@@ -203,6 +213,15 @@ function init(){
         //pyramid.rotation.y += 0.025;
         crate.rotation.y += 0.005;
 
+        for(var index=0; index<bullets.length; index+=1) {
+            if( bullets[index] === undefined ) continue;
+            if( bullets[index].alive == false ){
+                bullets.splice(index,1);
+                continue;
+            }
+            bullets[index].position.add(bullets[index].velocity);
+        };
+
         //up, SPACE
         if (keyIsDown(32)) {
             camera.position.y += player.speed;
@@ -237,39 +256,80 @@ function init(){
             //camera.rotation.set(0,-67.5,0);
         }
 
-
         //Weapon switch
-
         //1
         if (keyIsDown(49)) {
             meshes[playerWeapon].visible = false;
             playerWeapon = "pistol";
+            shootSpeed = 20;
         }
         
         //2
         if (keyIsDown(50)) {
             meshes[playerWeapon].visible = false;
             playerWeapon = "machinegun";
+            shootSpeed = 8;
         }
 
         //3
         if (keyIsDown(51)) {
             meshes[playerWeapon].visible = false;
             playerWeapon = "flamethrower";
+            shootSpeed = 15;
         }
 
         //4
         if (keyIsDown(52)) {
             meshes[playerWeapon].visible = false;
             playerWeapon = "sniper";
+            shootSpeed = 75;
         }
 
         //5
         if (keyIsDown(53)) {
             meshes[playerWeapon].visible = false;
             playerWeapon = "shotgun";
+            shootSpeed = 50;
+            console.log(shootSpeed);
         }
+        
+        //Shoot weapon
+        if (mouseDown && player.canShoot <= 0) {
+            console.log("down")
+            var bullet = new THREE.Mesh(
+                new THREE.SphereGeometry(0.025,8,8),
+                new THREE.MeshBasicMaterial({color:0xffffff})
+            );
 
+            bullet.position.set(
+                meshes[playerWeapon].position.x,
+                meshes[playerWeapon].position.y + 0.08,
+                meshes[playerWeapon].position.z
+            );
+
+            bullet.velocity = new THREE.Vector3(
+                -Math.sin(camera.rotation.y),
+                0,
+                -Math.cos(camera.rotation.y)
+            );
+
+            bullet.alive = true;
+            setTimeout(function(){
+                bullet.alive = false;
+                scene.remove(bullet);
+            }, 1000);
+
+            bullets.push(bullet);
+            scene.add(bullet);
+            shootSpeed = 100;
+            player.canShoot = shootSpeed;
+
+        }
+        
+
+
+        
+        if (player.canShoot > 0) player.canShoot -= 1;
     }
 
     render();
@@ -285,17 +345,17 @@ function animate(){
         return;
     }
     meshes[playerWeapon].visible = true;
-    meshes[playerWeapon].position.set(
-        camera.position.x - Math.sin(camera.rotation.y - Math.PI/6) * 0.65,
-        camera.position.y - 0.35,
-        camera.position.z - Math.cos(camera.rotation.y - Math.PI/6) * 0.65
-    );
     meshes[playerWeapon].rotation.set(
         camera.rotation.x,
         camera.rotation.y - Math.PI,
         camera.rotation.z
     );
-
+    meshes[playerWeapon].position.set(
+        camera.position.x - Math.sin(camera.rotation.y - Math.PI/6) * 0.65,
+        camera.position.y - 0.35,
+        camera.position.z - Math.cos(camera.rotation.y - Math.PI/6) * 0.65
+    );
+    
     requestAnimationFrame(animate);
 
 }

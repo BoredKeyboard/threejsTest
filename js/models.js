@@ -45,6 +45,8 @@ var models = {
 
 var meshes = {};
 
+var bullets = [];
+
 var visibility = false;
 
 function onResourcesLoaded() {
