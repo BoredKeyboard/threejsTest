@@ -3,13 +3,15 @@ var models = {
         obj: "assets/weaponPack/Models/machinegun.obj",
         mtl: "assets/weaponPack/Models/machinegun.mtl",
         meh: null,
-        castShadow: false
+        castShadow: false,
+        receiveShadow: false
     },
     flamethrower: {
         obj: "assets/weaponPack/Models/flamethrower.obj",
         mtl: "assets/weaponPack/Models/flamethrower.mtl",
         mesh: null,
-        castShadow: false
+        castShadow: false,
+        receiveShadow: false
     },
     windmill: {
         obj: "assets/fantasy/Models/Models/windmill.obj",
@@ -27,19 +29,22 @@ var models = {
         obj: "assets/weaponPack/Models/sniper.obj",
         mtl: "assets/weaponPack/Models/sniper.mtl",
         mesh: null,
-        castShadow: false
+        castShadow: false,
+        receiveShadow: false
     },
     pistol: {
         obj: "assets/weaponPack/Models/pistol.obj",
         mtl: "assets/weaponPack/Models/pistol.mtl",
         mesh: null,
-        castShadow: false
+        castShadow: false,
+        receiveShadow: false
     },
     shotgun: {
         obj: "assets/weaponPack/Models/shotgun.obj",
         mtl: "assets/weaponPack/Models/shotgun.mtl",
         mesh: null,
-        castShadow: false
+        castShadow: false,
+        receiveShadow: false
     }
 };
 
@@ -62,7 +67,6 @@ function onResourcesLoaded() {
     meshes["tower"].scale.set(0.16,0.13,0.16);
     //meshes["tower"].visible = false;
     scene.add(meshes["tower"]);
-    
 
     //Weapons
     meshes["machinegun"] = models.machinegun.mesh.clone();
