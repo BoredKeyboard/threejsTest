@@ -9,7 +9,7 @@ var mouseY = 0;
 var fireRate = 20;
 var player = {speed:0.05, canShoot:fireRate };
 var shadowRes = 512; //512 is default, recommended: 1024, 1536, 2048, 3072, 4096
-//yesnt
+var audio = new Audio("audio/moonTheme.mp3")
 var loadingScreen = {
     scene: new THREE.Scene(),
     camera: new THREE.PerspectiveCamera(200,window.innerWidth/window.innerHeight,0.1,100),
@@ -38,6 +38,8 @@ var camera = new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight
 
 function init(){
     
+    audio.play();
+
     var time = Date.now() * 0.0005;
 	var delta = clock.getDelta();
     
@@ -376,6 +378,12 @@ function animate(){
         renderer.render(loadingScreen.scene, loadingScreen.camera);
         return;
     }
+    meshes["windmill"].rotation.x -= 0.075;
+    meshes["man"].rotation.x -= 0.05;
+    meshes["man"].rotation.y -= 0.1;
+    meshes["man"].rotation.z -= 0.2;
+    meshes["man"].position.y += 0.01;
+
     meshes[playerWeapon].visible = true;
     meshes[playerWeapon].rotation.set(
         camera.rotation.x,

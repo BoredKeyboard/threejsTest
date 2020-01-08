@@ -45,6 +45,13 @@ var models = {
         mesh: null,
         castShadow: false,
         receiveShadow: false
+    },
+    man: {
+        obj: "assets/test/man.obj",
+        mtl: "assets/test/man.mtl",
+        mesh: null,
+        castShadow: false,
+        receiveShadow: false
     }
 };
 
@@ -67,6 +74,14 @@ function onResourcesLoaded() {
     meshes["tower"].scale.set(0.16,0.13,0.16);
     //meshes["tower"].visible = false;
     scene.add(meshes["tower"]);
+
+    //Man
+    meshes["man"] = models.man.mesh.clone();
+    meshes["man"].position.set(0,2,-5);
+    meshes["man"].scale.set(1,1,1);
+    meshes["man"].rotation.set(0,90,0);
+    meshes["man"].side = THREE.DoubleSide;
+    scene.add(meshes["man"]);
 
     //Weapons
     meshes["machinegun"] = models.machinegun.mesh.clone();
