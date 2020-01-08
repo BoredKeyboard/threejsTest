@@ -9,7 +9,7 @@ var mouseY = 0;
 var fireRate = 20;
 var player = {speed:0.05, canShoot:fireRate };
 var shadowRes = 512; //512 is default, recommended: 1024, 1536, 2048, 3072, 4096
-
+//yes
 var loadingScreen = {
     scene: new THREE.Scene(),
     camera: new THREE.PerspectiveCamera(200,window.innerWidth/window.innerHeight,0.1,100),
@@ -78,12 +78,12 @@ function init(){
 
     var cubeMaterials = 
     [
-        new THREE.MeshBasicMaterial( { map: textureLoader.load("assets/sor_cwd/cwd_bk.jpg"), side: THREE.DoubleSide}),
-        new THREE.MeshBasicMaterial( { map: textureLoader.load("assets/sor_cwd/cwd_bk.jpg"), side: THREE.DoubleSide}),
-        new THREE.MeshBasicMaterial( { map: textureLoader.load("assets/sor_cwd/cwd_dn.jpg"), side: THREE.DoubleSide}),
-        new THREE.MeshBasicMaterial( { map: textureLoader.load("assets/sor_cwd/cwd_dn.jpg"), side: THREE.DoubleSide}),
-        new THREE.MeshBasicMaterial( { map: textureLoader.load("assets/sor_cwd/cwd_rt.jpg"), side: THREE.DoubleSide}),
-        new THREE.MeshBasicMaterial( { map: textureLoader.load("assets/sor_cwd/cwd_lf.jpg"), side: THREE.DoubleSide})
+        new THREE.MeshBasicMaterial( { map: textureLoader.load("assets/sor_cwd/cwd_bk.JPG"), side: THREE.DoubleSide}),
+        new THREE.MeshBasicMaterial( { map: textureLoader.load("assets/sor_cwd/cwd_bk.JPG"), side: THREE.DoubleSide}),
+        new THREE.MeshBasicMaterial( { map: textureLoader.load("assets/sor_cwd/cwd_dn.JPG"), side: THREE.DoubleSide}),
+        new THREE.MeshBasicMaterial( { map: textureLoader.load("assets/sor_cwd/cwd_dn.JPG"), side: THREE.DoubleSide}),
+        new THREE.MeshBasicMaterial( { map: textureLoader.load("assets/sor_cwd/cwd_rt.JPG"), side: THREE.DoubleSide}),
+        new THREE.MeshBasicMaterial( { map: textureLoader.load("assets/sor_cwd/cwd_lf.JPG"), side: THREE.DoubleSide})
     ];
 
     var skyBox = new THREE.Mesh( new THREE.CubeGeometry( 1000, 1000, 1000 ), new THREE.MeshFaceMaterial( cubeMaterials ));
