@@ -9,7 +9,7 @@ var mouseY = 0;
 var fireRate = 20;
 var player = {speed:0.05, canShoot:fireRate };
 var shadowRes = 512; //512 is default, recommended: 1024, 1536, 2048, 3072, 4096
-//yes
+//yesnt
 var loadingScreen = {
     scene: new THREE.Scene(),
     camera: new THREE.PerspectiveCamera(200,window.innerWidth/window.innerHeight,0.1,100),
